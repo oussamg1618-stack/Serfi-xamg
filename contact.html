@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>اتصل بنا | AMG Serfix</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
+</head>
+<body>
+<header><div class="container">
+  <div class="logo"><div class="logo-mark">S</div> AMG Serfix</div>
+  <a href="index.html" class="back-link">← العودة للموقع الرئيسي</a>
+</div></header>
+<div class="quick-nav"><div class="container">
+  <a href="index.html">الرئيسية</a>
+  <a href="index.html#categories">الخدمات</a>
+  <a href="index.html#jobs">التوظيف</a>
+  <a href="index.html#egov">الإدارة الإلكترونية</a>
+  <a href="index.html#academy">الأكاديمية</a>
+  <a href="contract-generator.html">عقود رقمية</a>
+  <a href="pricing.html">الأسعار</a>
+  <a href="careers.html">وظائف عندنا</a>
+  <a href="provider-profile.html">نموذج مزود خدمة</a>
+  <a href="about.html">من نحن</a>
+  <a href="contact.html">اتصل بنا</a>
+  <a href="admin.html">لوحة التحكم</a>
+</div></div>
+
+<main><div class="container">
+  <h1>اتصل بنا</h1>
+  <p>سواء كنت مواطنًا، مؤسسة عمومية، أو شركة تريد الشراكة — يسعدنا تواصلك.</p>
+
+  <div class="contact-info">
+    <div>📧 البريد الرسمي: <a href="mailto:oussamg1618@gmail.com">oussamg1618@gmail.com</a></div>
+    <div>📍 الجزائر</div>
+    <div>🌐 www.serfixamg.dz</div>
+  </div>
+
+  <div class="form-card">
+    <form onsubmit="return submitContact(event)">
+      <div class="form-row"><label>الاسم / اسم المؤسسة</label><input type="text" id="ct-name" required></div>
+      <div class="form-row"><label>البريد الإلكتروني</label><input type="email" id="ct-email" required></div>
+      <div class="form-row"><label>الموضوع</label>
+        <select id="ct-subject" style="width:100%; padding:12px 14px; border:1px solid var(--line); border-radius:10px; font-family:'Tajawal'; font-size:14px; background:var(--paper);">
+          <option>استفسار عام</option>
+          <option>شراكة مؤسسة/شركة</option>
+          <option>شكوى أو مشكلة تقنية</option>
+          <option>طلب صحفي/إعلامي</option>
+        </select>
+      </div>
+      <div class="form-row"><label>الرسالة</label><textarea id="ct-message" rows="5" required></textarea></div>
+      <button class="btn" type="submit">إرسال الرسالة</button>
+      <div id="contact-msg" style="display:none; margin-top:14px; font-weight:700; color:var(--teal);">✅ تم تجهيز رسالتك (تجريبيًا). لتفعيل الإرسال الفعلي لإيميلك مباشرة، يمكن ربط هذا النموذج بخدمة مجانية مثل Formspree خلال دقائق.</div>
+    </form>
+  </div>
+</div></main>
+<footer>© 2026 AMG Serfix — جميع الحقوق محفوظة</footer>
+<script>
+async function submitContact(e){
+  e.preventDefault();
+  const record = {
+    name: document.getElementById('ct-name').value,
+    email: document.getElementById('ct-email').value,
+    subject: document.getElementById('ct-subject').value,
+    message: document.getElementById('ct-message').value
+  };
+  const msgBox = document.getElementById('contact-msg');
+  if(window.supabaseClient){
+    const { error } = await window.supabaseClient.from('contact_messages').insert([record]);
+    msgBox.textContent = error
+      ? "⚠️ حصل خطأ أثناء الإرسال: " + error.message
+      : "✅ تم إرسال رسالتك فعليًا. سنرد عليك قريبًا.";
+  } else {
+    msgBox.textContent = "✅ تم تجهيز رسالتك (وضع تجريبي — قاعدة البيانات غير مربوطة بعد، راجع config.js).";
+  }
+  msgBox.style.display = 'block';
+  return false;
+}
+</script>
+</body>
+</html>
